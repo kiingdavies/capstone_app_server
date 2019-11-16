@@ -1,7 +1,7 @@
-import moment from 'moment';
-import uuidv4 from 'uuid/v4';
-import db from '../db';
-import Helper from './Helper';
+const moment = require( 'moment');
+const uuidv4 = require('uuid/v4');
+const db = require('../db');
+const Helper = ('./Helper');
 
 const User = {
   /**
@@ -90,4 +90,4 @@ const User = {
   }
 }
 
-export default User;
+module.exports = User;

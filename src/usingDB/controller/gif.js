@@ -1,27 +1,25 @@
-import moment from 'moment';
-import uuidv4 from 'uuid/v4';
-import db from '../db';
+const moment = require('moment');
+const uuidv4 = require('uuid/v4');
+const db = require('../db');
 
-const Reflection = {
+const Gif = {
   /**
-   * Create A Reflection
+   * Create A gif
    * @param {object} req 
    * @param {object} res
-   * @returns {object} reflection object 
+   * @returns {object} gif object 
    */
   async create(req, res) {
     const createQuery = `INSERT INTO
-      reflections(id, success, low_point, take_away, owner_id, created_date, modified_date)
-      VALUES($1, $2, $3, $4, $5, $6, $7)
+      gif(gifid, message, createdon, title, imageurl)
+      VALUES($1, $2, $3, $4, $5)
       returning *`;
     const values = [
       uuidv4(),
-      req.body.success,
-      req.body.low_point,
-      req.body.take_away,
-      req.user.id,
+      req.body.message,
       moment(new Date()),
-      moment(new Date())
+      req.body.title,
+      req.body.imageurl
     ];
 
     try {
@@ -32,13 +30,13 @@ const Reflection = {
     }
   },
   /**
-   * Get All Reflections
+   * Get All gif
    * @param {object} req 
    * @param {object} res 
-   * @returns {object} reflections array
+   * @returns {object} gif array
    */
   async getAll(req, res) {
-    const findAllQuery = 'SELECT * FROM reflections where owner_id = $1';
+    const findAllQuery = 'SELECT * FROM gif where gifid = $1';
     try {
       const { rows, rowCount } = await db.query(findAllQuery, [req.user.id]);
       return res.status(200).send({ rows, rowCount });
@@ -47,13 +45,13 @@ const Reflection = {
     }
   },
   /**
-   * Get A Reflection
+   * Get A gif
    * @param {object} req 
    * @param {object} res
-   * @returns {object} reflection object
+   * @returns {object} gif object
    */
   async getOne(req, res) {
-    const text = 'SELECT * FROM reflections WHERE id = $1 AND owner_id = $2';
+    const text = 'SELECT * FROM gif WHERE gifid = $1';
     try {
       const { rows } = await db.query(text, [req.params.id, req.user.id]);
       if (!rows[0]) {
@@ -65,26 +63,26 @@ const Reflection = {
     }
   },
   /**
-   * Update A Reflection
+   * Update A gif
    * @param {object} req 
    * @param {object} res 
-   * @returns {object} updated reflection
+   * @returns {object} updated gif
    */
   async update(req, res) {
-    const findOneQuery = 'SELECT * FROM reflections WHERE id=$1 AND owner_id = $2';
+    const findOneQuery = 'SELECT * FROM gif WHERE id=$1';
     const updateOneQuery =`UPDATE reflections
-      SET success=$1,low_point=$2,take_away=$3,modified_date=$4
-      WHERE id=$5 AND owner_id = $6 returning *`;
+      SET message=$1,createdon=$2,title=$3,imageurl=$4
+      WHERE gifid=$5`;
     try {
       const { rows } = await db.query(findOneQuery, [req.params.id, req.user.id]);
       if(!rows[0]) {
         return res.status(404).send({'message': 'reflection not found'});
       }
       const values = [
-        req.body.success || rows[0].success,
-        req.body.low_point || rows[0].low_point,
-        req.body.take_away || rows[0].take_away,
+        req.body.message || rows[0].message,
         moment(new Date()),
+        req.body.title || rows[0].title,
+        req.body.imageurl || rows[0].imageurl,
         req.params.id,
         req.user.id
       ];
@@ -95,13 +93,13 @@ const Reflection = {
     }
   },
   /**
-   * Delete A Reflection
+   * Delete A gif
    * @param {object} req 
    * @param {object} res 
-   * @returns {void} return statuc code 204 
+   * @returns {void} return status code 204 
    */
   async delete(req, res) {
-    const deleteQuery = 'DELETE FROM reflections WHERE id=$1 AND owner_id = $2 returning *';
+    const deleteQuery = 'DELETE FROM gif WHERE gifid=$1';
     try {
       const { rows } = await db.query(deleteQuery, [req.params.id, req.user.id]);
       if(!rows[0]) {
@@ -114,4 +112,4 @@ const Reflection = {
   }
 }
 
-export default Reflection;
+module.exports = Gif;
