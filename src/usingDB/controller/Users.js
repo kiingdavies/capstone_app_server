@@ -8,7 +8,7 @@ const User = {
    * Create A User
    * @param {object} req 
    * @param {object} res
-   * @returns {object} reflection object 
+   * @returns {object} gif object 
    */
   async create(req, res) {
     if (!req.body.email || !req.body.password) {
@@ -20,8 +20,8 @@ const User = {
     const hashPassword = Helper.hashPassword(req.body.password);
 
     const createQuery = `INSERT INTO
-      users(id, email, password, created_date, modified_date)
-      VALUES($1, $2, $3, $4, $5)
+      users(id, firstname, lastname, email, password, gender, jobrole, department, address, created_date, modified_date)
+      VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
       returning *`;
     const values = [
       uuidv4(),

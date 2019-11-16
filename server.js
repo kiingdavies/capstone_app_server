@@ -11,7 +11,8 @@ const dotenv = require('dotenv');
 const babelpolyfill = require('babel-polyfill');
 const GifWithJsObject = require('./src/usingJSObject/controllers/gif');
 const GifWithDB = require('./src/usingDB/controller/gif');
-
+const UserWithDb = require('./src/usingDB/controller/Users');
+const Auth = require('./src/usingDB/middleware/Auth');
 
 
 dotenv.config();
@@ -24,14 +25,18 @@ app.get('/', (req, res) => {
   return res.status(200).send({'message': 'YAY! Congratulations! Your first endpoint is working'});
 });
 
-app.post('/api/v1/gif', /* Auth.verifyToken, */ Gif.create);
-app.get('/api/v1/gif', /* Auth.verifyToken, */ Gif.getAll);
-app.get('/api/v1/gif/:gifid', /* Auth.verifyToken, */ Gif.getOne);
-app.put('/api/v1/gif/:gifid', /* Auth.verifyToken, */ Gif.update);
-app.delete('/api/v1/gif/:gifid', /* Auth.verifyToken, */Gif.delete);
-// app.post('/api/v1/users', UserWithDb.create);
-// app.post('/api/v1/users/login',UserWithDb.login);
-// app.delete('/api/v1/users/me', Auth.verifyToken, UserWithDb.delete);
+// GIF ROUTES
+app.post('/api/v1/gif',  Auth.verifyToken, Gif.create);
+app.get('/api/v1/gif',  Auth.verifyToken, Gif.getAll);
+app.get('/api/v1/gif/:gifid',  Auth.verifyToken, Gif.getOne);
+app.put('/api/v1/gif/:gifid',  Auth.verifyToken, Gif.update);
+app.delete('/api/v1/gif/:gifid',  Auth.verifyToken, Gif.delete);
+
+
+// AUTH ROUTES
+app.post('/auth/v1/create-user', UserWithDb.create);
+app.post('/auth/v1/signin', UserWithDb.login);
+app.delete('/auth/v1/users/me', Auth.verifyToken, UserWithDb.delete);
 
 app.listen(3000)
 console.log('app running on port ', 3000);

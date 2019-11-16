@@ -1,5 +1,5 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const Helper = {
   /**
@@ -22,7 +22,7 @@ const Helper = {
   /**
    * isValidEmail helper method
    * @param {string} email
-   * @returns {Boolean} True or False
+  * @returns {Boolean} True or False
    */
   isValidEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
@@ -42,4 +42,4 @@ const Helper = {
   }
 }
 
-export default Helper;
+module.exports = Helper;

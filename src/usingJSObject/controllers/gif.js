@@ -46,7 +46,7 @@ const Gif = {
   update(req, res) {
     const gif = GifModel.findOne(req.params.gifid);
     if (!gif) {
-      return res.status(404).send({'message': 'reflection not found'});
+      return res.status(404).send({'message': 'gif not found'});
     }
     const updatedGif = GifModel.update(req.params.gifid, req.body)
     return res.status(200).send(updatedGif);
