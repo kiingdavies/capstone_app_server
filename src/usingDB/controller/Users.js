@@ -1,7 +1,7 @@
 const moment = require( 'moment');
 const uuidv4 = require('uuid/v4');
 const db = require('../db');
-const Helper = ('./Helper');
+const Helper = require('./Helper');
 
 const User = {
   /**
@@ -19,14 +19,20 @@ const User = {
     }
     const hashPassword = Helper.hashPassword(req.body.password);
 
-    const createQuery = `INSERT INTO
+    const createQuery = `INSERT INTO 
       users(id, firstname, lastname, email, password, gender, jobrole, department, address, created_date, modified_date)
       VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
       returning *`;
     const values = [
       uuidv4(),
+      req.body.firstname,
+      req.body.lastname,
       req.body.email,
       hashPassword,
+      req.body.gender,
+      req.body.jobrole,
+      req.body.department,
+      req.body.address,
       moment(new Date()),
       moment(new Date())
     ];

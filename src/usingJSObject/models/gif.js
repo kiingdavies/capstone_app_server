@@ -46,8 +46,9 @@ class Gif {
   update(gifid, data) {
     const gif = this.findOne(gifid);
     const index = this.gif.indexOf(gif);
-    this.gif[index].message= data['message'] || gif.message;
-    this.gif[index].title= data['title'] || gif.title;
+    this.gif[index].message = data['message'] || gif.message;
+    this.gif[index].title = data['title'] || gif.title;
+    this.gif[index].imageurl = data['imageurl'] || gif.imageurl;
     return this.gif[index];
   }
   /**

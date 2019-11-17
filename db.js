@@ -40,13 +40,19 @@ const createTable = () => {
 /**
  * Create User Table
  */
-const createUserTable = () => {
+const createUserTable = () => {     
   const queryText =
     `CREATE TABLE IF NOT EXISTS
       users(
         id UUID PRIMARY KEY,
+        firstname VARCHAR(50) NOT NULL,
+        lastname VARCHAR(50) NOT NULL,
         email VARCHAR(128) UNIQUE NOT NULL,
         password VARCHAR(128) NOT NULL,
+        gender VARCHAR(10) NOT NULL ,
+        jobrole VARCHAR(50) NOT NULL,
+        department VARCHAR(50) NOT NULL,
+        address VARCHAR(100) NOT NULL,
         created_date TIMESTAMP,
         modified_date TIMESTAMP
       )`;

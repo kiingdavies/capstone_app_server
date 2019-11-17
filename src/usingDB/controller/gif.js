@@ -11,8 +11,8 @@ const Gif = {
    */
   async create(req, res) {
     const createQuery = `INSERT INTO
-      gif(gifid, message, createdon, title, imageurl)
-      VALUES($1, $2, $3, $4, $5)
+      gif( message, title, imageurl)
+      VALUES($1, $2, $3)
       returning *`;
     const values = [
       uuidv4(),
@@ -55,7 +55,7 @@ const Gif = {
     try {
       const { rows } = await db.query(text, [req.params.id, req.user.id]);
       if (!rows[0]) {
-        return res.status(404).send({'message': 'reflection not found'});
+        return res.status(404).send({'message': 'gifnot found'});
       }
       return res.status(200).send(rows[0]);
     } catch(error) {
@@ -70,13 +70,13 @@ const Gif = {
    */
   async update(req, res) {
     const findOneQuery = 'SELECT * FROM gif WHERE id=$1';
-    const updateOneQuery =`UPDATE reflections
+    const updateOneQuery =`UPDATE gif
       SET message=$1,createdon=$2,title=$3,imageurl=$4
       WHERE gifid=$5`;
     try {
       const { rows } = await db.query(findOneQuery, [req.params.id, req.user.id]);
       if(!rows[0]) {
-        return res.status(404).send({'message': 'reflection not found'});
+        return res.status(404).send({'message': 'gif not found'});
       }
       const values = [
         req.body.message || rows[0].message,
@@ -103,7 +103,7 @@ const Gif = {
     try {
       const { rows } = await db.query(deleteQuery, [req.params.id, req.user.id]);
       if(!rows[0]) {
-        return res.status(404).send({'message': 'reflection not found'});
+        return res.status(404).send({'message': 'gif not found'});
       }
       return res.status(204).send({ 'message': 'deleted' });
     } catch(error) {
