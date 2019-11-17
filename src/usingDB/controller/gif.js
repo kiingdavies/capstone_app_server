@@ -10,10 +10,9 @@ const Gif = {
    * @returns {object} gif object 
    */
   async create(req, res) {
-    const createQuery = `INSERT INTO
-      gif( message, title, imageurl)
-      VALUES($1, $2, $3)
-      returning *`;
+    const createQuery =  `INSERT INTO
+    gif(gifid, message, createdon, title, imageurl)
+    VALUES($1, $2, $3, $4, $5)`;
     const values = [
       uuidv4(),
       req.body.message,
@@ -113,3 +112,13 @@ const Gif = {
 }
 
 module.exports = Gif;
+`INSERT INTO
+      gif(gifid, message, createdon, title, imageurl)
+      VALUES($1, $2, $3, $4, $5)
+      returning *`;
+
+
+      `INSERT INTO
+      gif(gifid, message, createdon, title, imageurl)
+      VALUES($1, $2, $3, $4, $5)
+      returning *`;
